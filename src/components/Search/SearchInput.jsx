@@ -11,15 +11,14 @@ const SearchInput = ({ onSearch }) => {
   };
 
   return (
-    <form onSubmit={submitHandler}>
-      <input
-        type="text"
-        name=""
-        placeholder="Search Country..."
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-      />
-    </form>
+    <input
+      onKeyUp={submitHandler}
+      type="text"
+      name=""
+      placeholder="Search Country..."
+      value={input}
+      onChange={(e) => setInput(e.target.value)}
+    />
   );
 };
 
