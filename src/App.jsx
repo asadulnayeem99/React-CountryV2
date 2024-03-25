@@ -13,8 +13,7 @@ const App = () => {
       </header>
 
       <div className="container">
-        {" "}
-        <AllCountries />
+        {/* <AllCountries /> */}
         <Routes>
           <Route path="/" element={<AllCountries />} />
           <Route path="/country/:countryName" element={<Countryinfo />} />
