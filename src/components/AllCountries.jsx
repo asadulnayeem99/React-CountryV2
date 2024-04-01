@@ -1,6 +1,9 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
+import Region from "./Region";
 import Result from "./Search/Result";
+export const url = "https://restcountries.com/v3.1/all";
+export const Regionurl = "https://restcountries.com/v3.1/";
 
 const AllCountries = () => {
   const [countries, setCountries] = useState([]);
@@ -12,7 +15,7 @@ const AllCountries = () => {
     const getAllcountries = async () => {
       try {
         setIsLoading(true);
-        const rs = await fetch("https://restcountries.com/v3.1/all");
+        const rs = await fetch(url);
         const data = await rs.json();
         setCountries(data);
         setData1(data);
@@ -26,13 +29,14 @@ const AllCountries = () => {
     getAllcountries();
   }, []);
 
-  const getCountryByName = async (name) => {
+  const getCountryByRegion = async (cregion) => {
     try {
-      const res = await fetch(`https://restcountries.com/v3.1/name/${name}`);
+      const res = await fetch(`${Regionurl}/region/${cregion}`);
       if (!res.ok) throw new Error("Not Found Country");
       const data = await res.json();
-      setCountries(data);
-      setData1(countries);
+      // setCountries(data);
+      console.log(data);
+      setData1(data);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -40,9 +44,21 @@ const AllCountries = () => {
     }
   };
 
+  const SearchRegion = (e) => {
+    const svalue = e.target.value;
+    if (svalue === "") {
+      setData1(null);
+    }
+    const filterData = countries?.filter((country) =>
+      country.region.toLowerCase().includes(svalue.toLowerCase())
+    );
+    setData1(filterData);
+    // setCountries(filterData);
+    // console.log(filterData);
+  };
+
   const SearchCountry = (e) => {
     const svalue = e.target.value;
-    // console.log(svalue);
     if (svalue === "") {
       setData1(null);
     }
@@ -68,17 +84,19 @@ const AllCountries = () => {
   return (
     <>
       <div className="all_country_wrapper">
-        <div className="country_top">
+        <div className="country_top flex justify-between rounded-sm">
           <div className="search">
             <input
               type="text"
               name=""
               placeholder="Search Country..."
-              onChange={SearchCountry}
+              onChange={SearchCountry && SearchRegion}
             />
           </div>
+          <div className="filter">
+            <Region onSelect={getCountryByRegion} />
+          </div>
         </div>
-
         <Result data={data1} />
       </div>
     </>
